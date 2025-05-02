@@ -3,7 +3,8 @@
 #
 # This source code is licensed under the BSD-style license found in the
 # LICENSE file in the root directory of this source tree.
-#THIS IS FROM TORCHTUNE, Cite appropriately
+# Code in this file from: https//github.com/pytorch/torchtune
+# We thank the torchtune maintainers and contributors for their wonderful post-training library
 from typing import Tuple
 
 import torch
