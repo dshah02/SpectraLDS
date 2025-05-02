@@ -100,19 +100,17 @@ def load_stu_model(config_path: str, checkpoint_path: str, device: torch.device,
     print(f"Checkpoint loaded in {time() - start_time:.2f} seconds.")
 
     model.load_state_dict(state_dict, strict=False)
-    model.setup_phi()
+    model.setup_phi() #precomputes phi_proj for tensor_dot
     print("Model weights loaded successfully!")
 
     if future_fill:
         fftconv = None
-        if True:
-            fftconv = FlashFFTConv(config_data["seq_len"], dtype=torch.bfloat16).cuda()
-
-        for idx in range(0, 12, 2):
-            model.layers[idx].stu.setup_ff(fftconv = fftconv)
+        # fftconv = FlashFFTConv(config_data["seq_len"], dtype=torch.bfloat16).cuda()
+        model.setup_ff(fftconv = fftconv)
+        
 
     if is_lds:
-        model.setup_lds(lds_path = ".models/250_phi_lds..pt", state_dim = 410)
+        model.setup_lds(lds_path = "./models/80_phi_lds.pt", state_dim = 160)
 
     if torch_compile:
         model = apply_compile(model)

@@ -82,7 +82,6 @@ class FlashSTU(PreTrainedModel):
         self.future_fill = future_fill
         print("Model Parameter Count: %.2fM\n" % (self._get_num_params() / 1e6,))
 
-    ##NEED TO MERGE ALL THESE SETUPS
     def setup_phi(self):
         for layer in self.layers:
             if hasattr(layer, 'stu'):
@@ -97,7 +96,11 @@ class FlashSTU(PreTrainedModel):
                     state_dim = state_dim,
                     dtype = dtype
                 )
-    
+    def setup_ff(self, fftconv = None):
+       for layer in self.layers:
+            if hasattr(layer, 'stu'):
+               layer.stu.setup_ff(fftconv = fftconv)
+
     def setup_caches(self, batch_size: int, dtype: torch.dtype = None) -> None:
         """Setup key value caches for attention calculation.
 
