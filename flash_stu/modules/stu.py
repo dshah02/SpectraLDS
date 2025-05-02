@@ -85,7 +85,6 @@ class STU(nn.Module):
     def forward(
         self, x: torch.Tensor, input_pos = None, *args, **kwargs) -> torch.Tensor:
 
-
         #STU TENSOR DOT APPROXIMATION - COULD USE FUTURE FILL OR CACHE OR NEITHER
         if self.use_approx:
             # Contract inputs and filters over the K and d_in dimensions, then convolve
@@ -149,7 +148,6 @@ class STU(nn.Module):
                 )
     
         else: #STU  - COULD USE CACHE OR NO CACHE
-            #STU CACHE IS STILL BUGGY, DO NOT USE BESIDES FOR SPEED BENCHMARKING
             if self.cache is not None and input_pos.shape[0] != 1:
                 _ = self.cache.update(x.squeeze(dim=0), input_pos)
                                 
@@ -159,7 +157,6 @@ class STU(nn.Module):
                     )
                 else:
                     U_plus, U_minus = convolve(x, self.stu_filters, self.n, self.use_approx)
-                # print(U_plus.shape, U_minus.shape)  #torch.Size([1, 1, 24, 128]) torch.Size([1, 1, 24, 128])
                 spectral_plus = torch.tensordot(
                     U_plus, self.M_phi_plus, dims=([2, 3], [0, 1])
                 )
@@ -171,12 +168,13 @@ class STU(nn.Module):
                 x = self.cache.update(x.squeeze(dim=0), input_pos)
                 #x shape = [1, L, D], self.stu_filters has shape = [L, K] 
                 pos = input_pos.item()
-                
-                U_plus = torch.einsum('bld,lk->bkd', x[:, :pos+1, :], self.stu_filters[:pos+1]).unsqueeze(dim = 1)
+                subset_seq = x[:, :pos+1, :]
+                flipped_seq = torch.flip(subset_seq, dims=[1])
 
+                U_plus = torch.einsum('bld,lk->bkd', flipped_seq, self.stu_filters[:pos+1]).unsqueeze(dim = 1)
                 stu_filters_alt = self.stu_filters[:pos+1].clone()
-                stu_filters_alt[1::2] *= -1  # Multiply odd indices by -1
-                U_minus = torch.einsum('bld,lk->bkd', x[:, :pos+1, :], stu_filters_alt).unsqueeze(dim = 1)                
+                stu_filters_alt[1::2] *= -1
+                U_minus = torch.einsum('bld,lk->bkd', flipped_seq, stu_filters_alt).unsqueeze(dim = 1)                
                 
                 # print("U", U_plus.shape) #torch.Size([1, 1, 24, 128])
                 spectral_plus = torch.tensordot(
