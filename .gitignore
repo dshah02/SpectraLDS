@@ -115,8 +115,7 @@ __MACOSX/
 
 outputs/
 *.pyc
-model_step-114000.safetensors
 slurm/slurm_output
 slurm/processed_outputs
-models/
+models/model_step-114000.safetensors
 __pycache__
