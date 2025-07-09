@@ -2,7 +2,7 @@
 
 **Devan Shah, Shlomo Fortgang, Sofiia Druchnya, Elad Hazan**  
 Princeton University · Google DeepMind  
-[arXiv Paper](https://arxiv.org/abs/2505.17868)
+[arXiv Paper](https://arxiv.org/abs/2505.17868), [website](https://dshah02.github.io/spectralds.io/), [slides](https://dshah02.github.io/pdfs/spectralds_slides.pdf)
 
 ---
 
