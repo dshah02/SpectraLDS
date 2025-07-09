@@ -60,6 +60,8 @@ SpectraLDS maintains performance across benchmarks compared to STU and Transform
 | SpectraLDS 340M | 26.58| 30.45     | 65.29| 60.12  | 50.99       | 20.15| 20.20| 54.17  | 23.29  | 39.03   |
 | Transformer 340M| 26.81| 30.41     | 64.64| 61.10  | 51.62       | 19.98| 18.80| 55.47  | 21.84  | 38.96   |
 
+---
+
 @article{shah2025spectralds,
   title={SpectraLDS: Provable Distillation for Linear Dynamical Systems}, 
   author={Devan Shah and Shlomo Fortgang and Sofiia Druchnya and Elad Hazan},
